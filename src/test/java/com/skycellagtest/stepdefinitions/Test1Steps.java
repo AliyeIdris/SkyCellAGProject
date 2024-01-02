@@ -15,15 +15,15 @@ public class Test1Steps {
     public void customerShouldReceiveANotificationOfLowBatteryLevelWarning() {
     }
 
-    @When("customer selects the locations as {string} {string} {string} where the battery level will be changed")
-    public void customerSelectsTheLocationsAsWhereTheBatteryLevelWillBeChanged(String location1, String location2, String location3) {
+    @When("customer selects the locations where the battery level will be changed {string}")
+    public void customerSelectsTheLocationsWhereTheBatteryLevelWillBeChanged(String location) {
     }
 
-    @And("customer sets the battery level threshold as <{int}>")
+    @And("customer sets the battery level threshold as {int}")
     public void customerSetsTheBatteryLevelThresholdAs(int batteryLevel) {
     }
-
     @Then("LED light should blink as battery exchange happened")
     public void ledLightShouldBlinkAsBatteryExchangeHappened() {
     }
+
 }
