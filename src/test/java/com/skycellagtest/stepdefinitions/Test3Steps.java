@@ -1,5 +1,6 @@
 package com.skycellagtest.stepdefinitions;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.skycellag.payloads.LoggerPayload;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHelper;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.json.JSONObject;
 import org.junit.Assert;
 
 import static com.skycellag.utilities.ConfigUtility.readConfig;
@@ -44,6 +46,9 @@ public class Test3Steps extends TestBase {
 
     @And("user verify the response content")
     public void userVerifyTheResponseContent() {
-        response.prettyPrint();
+        System.out.println("loggerNumber: "+payload.getLoggerNumber());
+        System.out.println("loggerType: "+payload.getLoggerType());
+        System.out.println("baseInterval: "+payload.getBaseInterval());
+
     }
 }
