@@ -13,7 +13,7 @@ import org.junit.Assert;
 import java.util.Base64;
 
 
-import static com.skycellag.utilities.ConfigUtility.readConfig;
+import static com.skycellag.utilities.FileUtility.readConfig;
 import static io.restassured.RestAssured.given;
 
 /**
@@ -42,7 +42,7 @@ public class Test2Steps extends TestBase {
 
     @Then("the api should return {int} status code")
     public void theApiShouldReturnStatusCode(int statusCode) {
-        Assert.assertEquals(statusCode,response.getStatusCode());
+        Assert.assertEquals(response.getStatusCode(),statusCode);
     }
 
     @And("the api should return a response body with token detail")

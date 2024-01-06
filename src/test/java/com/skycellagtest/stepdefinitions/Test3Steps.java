@@ -1,9 +1,8 @@
 package com.skycellagtest.stepdefinitions;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.skycellag.payloads.LoggerPayload;
 import com.skycellag.utilities.TestBase;
-import com.skycellag.utilities.TestDataHelper;
+import com.skycellag.utilities.TestDataHolder;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,10 +10,9 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONObject;
 import org.junit.Assert;
 
-import static com.skycellag.utilities.ConfigUtility.readConfig;
+import static com.skycellag.utilities.FileUtility.readConfig;
 import static io.restassured.RestAssured.given;
 
 /**
@@ -29,7 +27,7 @@ public class Test3Steps extends TestBase {
     @Given("user has valid credentials and payload to create a logger {string}")
     public void userHasValidCredentialsAndPayloadToCreateALogger(String loggerType) {
         RestAssured.baseURI=loggerURL;
-        String loggerNumber=TestDataHelper.randomLoggerNumber();
+        String loggerNumber= TestDataHolder.randomLoggerNumber();
         payload=new LoggerPayload(loggerNumber,loggerType,600);
     }
 
