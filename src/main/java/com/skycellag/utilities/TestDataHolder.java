@@ -1,6 +1,6 @@
 package com.skycellag.utilities;
 
-import com.skycellag.payloads.LoggerPayload;
+import com.skycellag.payloads.LoggerPojo;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -36,7 +36,7 @@ public class TestDataHolder extends TestBase{
                 .formParam("username",username)
                 .formParam("password",password)
                 .when().post(tokenURL).then().extract().response();
-        Assert.assertEquals(response.getStatusCode(),200);
+        Assert.assertEquals(200,response.getStatusCode());
         String token=response.jsonPath().getString("access_token");
         return token;
     }
@@ -44,10 +44,10 @@ public class TestDataHolder extends TestBase{
         String loggerURL=readConfig("loggerURL");
         RestAssured.baseURI=loggerURL;
         String loggerNumber=randomLoggerNumber();
-        LoggerPayload payload=new LoggerPayload(loggerNumber,"MR_810T",600);
+        LoggerPojo payload=new LoggerPojo(loggerNumber,"MR_810T",600);
         response=given().contentType(ContentType.JSON).and().headers("APIKEY",apiKey)
                 .body(payload).when().post(loggerURL).then().extract().response();
-        Assert.assertEquals(response.getStatusCode(),201);
+        Assert.assertEquals(201,response.getStatusCode());
         return loggerNumber;
     }
 }

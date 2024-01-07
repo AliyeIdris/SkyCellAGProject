@@ -1,6 +1,6 @@
 package com.skycellagtest.stepdefinitions;
 
-import com.skycellag.payloads.LoggerPayload;
+import com.skycellag.payloads.LoggerPojo;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHolder;
 import io.cucumber.java.en.And;
@@ -23,12 +23,12 @@ import static io.restassured.RestAssured.given;
 public class Test3Steps extends TestBase {
     String loggerURL=readConfig("loggerURL");
     Response response;
-    LoggerPayload payload;
+    LoggerPojo payload;
     @Given("user has valid credentials and payload to create a logger {string}")
     public void userHasValidCredentialsAndPayloadToCreateALogger(String loggerType) {
         RestAssured.baseURI=loggerURL;
         String loggerNumber= TestDataHolder.randomLoggerNumber();
-        payload=new LoggerPayload(loggerNumber,loggerType,600);
+        payload=new LoggerPojo(loggerNumber,loggerType,600);
     }
 
     @When("user sends a post request to the api server")

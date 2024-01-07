@@ -1,14 +1,12 @@
 package com.skycellagtest.stepdefinitions;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
+import com.skycellag.payloads.LoggerPojo;
+import com.skycellag.payloads.Loggers;
 import com.skycellag.payloads.sensorpayload.EndDeviceIds;
-import com.skycellag.payloads.sensorpayload.MainPayload;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHolder;
-import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
@@ -18,9 +16,16 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.Assert;
 
-import java.io.File;
+import java.io.*;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.skycellag.utilities.FileUtility.readConfig;
 import static io.restassured.RestAssured.given;
@@ -33,15 +38,21 @@ import static io.restassured.RestAssured.given;
 public class Test4Steps extends TestBase {
     Scenario scenario;
     String sensorURL = readConfig("sensorURL");
-    String sensorReadURL = readConfig("sensorReadUR");
+    String sensorReadURL = readConfig("sensorReadURL");
     Response response;
     String JwTToken;
     String loggerNumber;
-    JsonObject ob;
+    JSONObject bodyPayload;
+    String fileAddress;
+    JSONParser parser;
+    Loggers loggers;
 
     @Before
     public void beforeTestStart(Scenario scenario) {
         this.scenario = scenario;
+        parser=new JSONParser();
+        String s= File.separator;
+        fileAddress=System.getProperty("user.dir")+s+"src"+s+"test"+s+"resources"+s+"TestData"+s;
     }
 
     //Background
@@ -55,34 +66,59 @@ public class Test4Steps extends TestBase {
     @Given("user should have a valid url and request body")
     public void userShouldHaveAValidUrlAndRequestBody() {
         RestAssured.baseURI=sensorURL;
-        String s= File.separator;
-        String filePath=System.getProperty("user.dir")+s+"src"+s+"test"+s+"resources"+s+"TestData"+s+"sensorData.json";
-        JsonObject body=(JsonObject) new JsonParser().parse(filePath);
+
         EndDeviceIds endDeviceIds=new EndDeviceIds("eui_"+loggerNumber,loggerNumber);
-        ob=new JsonObject();
-        ob.add("end_device_ids",new Gson().toJsonTree(endDeviceIds));
-        ob.add("received_at",body.get("received_at"));
-        ob.add("uplink_message",body.get("uplink_message"));
+        try {
+            Object obj=parser.parse(new FileReader(fileAddress+"sensorData.json"));
+            bodyPayload =(JSONObject)obj;
+            bodyPayload.put("end_device_ids",new Gson().toJsonTree(endDeviceIds));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @When("user sends post request to the server")
     public void userSendsPostRequestToTheServer() {
-
         response=given().contentType(ContentType.JSON).and().headers("APIKEY",apiKey)
-                .body(ob).when().post(sensorURL).then().extract().response();
+                .body(bodyPayload.toString()).when().post(sensorURL).then().extract().response();
     }
 
     //scenario 2
     @Given("user has a valid url and request body for temperature")
     public void userHasAValidUrlAndRequestBodyForTemperature() {
+        RestAssured.baseURI=sensorReadURL;
+        loggers=new Loggers(loggerNumber,"MR_810T");
+        try {
+            Object obj = parser.parse(new FileReader(fileAddress+"temperature.json"));
+            bodyPayload=(JSONObject)obj;
+            bodyPayload.put("loggers",new Gson().toJsonTree(new ArrayList<>(Arrays.asList(loggers))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     @When("user sends post request with temperature payload")
     public void userSendsPostRequestWithTemperaturePayload() {
+        response=given().contentType(ContentType.JSON).and().headers("APIKEY",apiKey)
+                .body(bodyPayload.toString()).when().post(sensorReadURL).then().extract().response();
     }
 
     @And("user verify the response body with temperature information")
     public void userVerifyTheResponseBodyWithTemperatureInformation() {
+        response.getBody().prettyPrint();
+        String responseBody=response.getBody().asString();
+        Assert.assertTrue(responseBody.contains(loggerNumber));
+        Assert.assertEquals(response.getHeader("Content-Type"),"application/json");
+        Assert.assertTrue(responseBody.contains(loggers.getLoggerType()));
+        Assert.assertTrue(responseBody.contains("TEMPERATURE"));
+        Assert.assertTrue(responseBody.contains("23.1"));
     }
 
     //scenario 3
@@ -101,6 +137,7 @@ public class Test4Steps extends TestBase {
     //all scenario
     @Then("server should return {int} status code")
     public void serverShouldReturnStatusCode(int statusCode) {
+        Assert.assertEquals(statusCode,response.getStatusCode());
     }
 }
 
