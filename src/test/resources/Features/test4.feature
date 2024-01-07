@@ -10,7 +10,8 @@ Feature: Admin user should be able to send request to api server and read data b
     Then server should return 201 status code
 
   Scenario: User should be able to read temperature information from the server
-    Given user has a valid url and request body for temperature
+    Given user should already send sensor request to the server with valid loggerNumber
+    And user has a valid url and request body for temperature
     When user sends post request with temperature payload
     Then server should return 200 status code
     And user verify the response body with temperature information

@@ -53,13 +53,13 @@ public class FileUtility {
 
     public static void main(String[] args) {
         //System.out.println(readSensorPayload().getReceivedAt());
-        String s=File.separator;
+       /* String s=File.separator;
         String filePath=System.getProperty("user.dir")+s+"src"+s+"test"+s+"resources"+s+"TestData"+s+"temperature.json";
         EndDeviceIds endDeviceIds;
         String loggerNumber;
         try {
             JsonObject myObject=(JsonObject) new JsonParser().parse(new FileReader(filePath));
-             loggerNumber=TestDataHolder.loggerNumber();
+            loggerNumber=TestDataHolder.randomLoggerNumber();
              endDeviceIds=new EndDeviceIds("eui_"+loggerNumber,loggerNumber);
 
             JsonObject ob=new JsonObject();
@@ -96,7 +96,8 @@ public class FileUtility {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        System.out.println(TestDataHolder.randomLoggerNumber());
 
     }
 }
