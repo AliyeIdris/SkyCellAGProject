@@ -2,9 +2,8 @@ package com.skycellagtest;
 
 import com.google.gson.Gson;
 import com.skycellag.payloads.LoggerPojo;
-import com.skycellag.payloads.sensorpayload.EndDeviceIds;
+import com.skycellag.payloads.EndDeviceIds;
 import com.skycellag.utilities.TestBase;
-import com.skycellag.utilities.TestDataHolder;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

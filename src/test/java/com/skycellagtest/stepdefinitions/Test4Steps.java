@@ -2,7 +2,7 @@ package com.skycellagtest.stepdefinitions;
 
 import com.google.gson.Gson;
 import com.skycellag.payloads.Loggers;
-import com.skycellag.payloads.sensorpayload.EndDeviceIds;
+import com.skycellag.payloads.EndDeviceIds;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHolder;
 import com.skycellagtest.ResponseHolder;

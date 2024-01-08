@@ -1,4 +1,4 @@
-package com.skycellag.payloads.sensorpayload;
+package com.skycellag.payloads;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
