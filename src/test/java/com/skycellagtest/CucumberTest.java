@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
         plugin = {"pretty","html:target/cucumber-testReport.html",
                   "junit:target/cucumber-results.xml"},
         features = {"classpath:Features/"},
-        tags="@Test3"
+        tags="@Test4"
 )
 public class CucumberTest {
 }

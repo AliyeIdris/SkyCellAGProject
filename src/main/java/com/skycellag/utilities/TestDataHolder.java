@@ -1,15 +1,11 @@
 package com.skycellag.utilities;
 
-import com.skycellag.payloads.LoggerPojo;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.junit.Assert;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
-
-import static com.skycellag.utilities.FileUtility.readConfig;
-import static io.restassured.RestAssured.given;
+import java.util.TimeZone;
 
 /**
  * @author : user
@@ -26,5 +22,16 @@ public class TestDataHolder{
             sb.append(String.format("%08x", r.nextInt()));
         }
         return sb.toString().substring(0, digitCount);
+    }
+    private static int counter = 10;
+    public static int incrementAndReturn() {
+        counter++;
+        return counter;
+    }
+    public static String receivedTime(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+        return sdf.format(date);
     }
 }

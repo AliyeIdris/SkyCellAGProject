@@ -1,4 +1,4 @@
-@APITest
+@APITest @Test4
 Feature: Admin user should be able to send request to api server and read data back from the server
 
   Background: User should have API specification and Logger Number for each scenario
@@ -10,14 +10,17 @@ Feature: Admin user should be able to send request to api server and read data b
     Then server should return 201 status code
 
   Scenario: User should be able to read temperature information from the server
-    Given user should already send sensor request to the server with valid loggerNumber
-    And user has a valid url and request body for temperature
+    Given user has a valid url
+    And user should already send sensor request to the server with valid loggerNumber
+    And user has a valid request body for temperature
     When user sends post request with temperature payload
     Then server should return 200 status code
     And user verify the response body with temperature information
 
   Scenario: User should be able to read battery voltage information from the server
-    Given user has a valid url and request body for battery voltage
+    Given user has a valid url
+    And user should already send sensor request to the server with valid loggerNumber
+    And user has a valid request body for battery voltage
     When user sends post request with battery voltage payload
     Then server should return 200 status code
     And user verify the response body with battery voltage information
