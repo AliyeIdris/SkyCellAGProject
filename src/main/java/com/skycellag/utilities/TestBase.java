@@ -1,6 +1,6 @@
 package com.skycellag.utilities;
 
-import static com.skycellag.utilities.ConfigUtility.readConfig;
+import static com.skycellag.utilities.FileUtility.readConfig;
 
 /**
  * @author : user
@@ -8,8 +8,8 @@ import static com.skycellag.utilities.ConfigUtility.readConfig;
  * @Email :aliyeidiris@gmail.com
  **/
 public class TestBase {
-    public String apiKey=readConfig("apiKey");
-    public String username=readConfig("username");
-    public String password=readConfig("password");
+    public static String apiKey=readConfig("apiKey");
+    public static String username=readConfig("username");
+    public static String password=readConfig("password");
 
 }

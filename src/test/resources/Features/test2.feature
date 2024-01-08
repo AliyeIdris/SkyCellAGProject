@@ -1,5 +1,7 @@
+@APITest
 Feature: An authenticated user should be able to access his/her token
 
+  @Test2
   Scenario: A user should be able to access her token and validate it
     Given user has a valid authentication information to connect to the Api
     When user sends a post request to the endpoint

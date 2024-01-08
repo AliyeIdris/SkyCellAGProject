@@ -1,9 +1,10 @@
 package com.skycellagtest.stepdefinitions;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.skycellag.payloads.LoggerPayload;
+import com.skycellag.payloads.LoggerPojo;
 import com.skycellag.utilities.TestBase;
-import com.skycellag.utilities.TestDataHelper;
+import com.skycellag.utilities.TestDataHolder;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,10 +12,9 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONObject;
 import org.junit.Assert;
 
-import static com.skycellag.utilities.ConfigUtility.readConfig;
+import static com.skycellag.utilities.FileUtility.readConfig;
 import static io.restassured.RestAssured.given;
 
 /**
@@ -23,14 +23,19 @@ import static io.restassured.RestAssured.given;
  * @Email :aliyeidiris@gmail.com
  **/
 public class Test3Steps extends TestBase {
+    Scenario scenario;
     String loggerURL=readConfig("loggerURL");
     Response response;
-    LoggerPayload payload;
+    LoggerPojo payload;
+    @Before
+    public void beforeTest(Scenario scenario){
+        this.scenario=scenario;
+    }
     @Given("user has valid credentials and payload to create a logger {string}")
     public void userHasValidCredentialsAndPayloadToCreateALogger(String loggerType) {
         RestAssured.baseURI=loggerURL;
-        String loggerNumber=TestDataHelper.randomLoggerNumber();
-        payload=new LoggerPayload(loggerNumber,loggerType,600);
+        String loggerNumber= TestDataHolder.randomLoggerNumber();
+        payload=new LoggerPojo(loggerNumber,loggerType,600);
     }
 
     @When("user sends a post request to the api server")
@@ -46,9 +51,9 @@ public class Test3Steps extends TestBase {
 
     @And("user verify the response content")
     public void userVerifyTheResponseContent() {
-        System.out.println("loggerNumber: "+payload.getLoggerNumber());
-        System.out.println("loggerType: "+payload.getLoggerType());
-        System.out.println("baseInterval: "+payload.getBaseInterval());
+        scenario.log("loggerNumber: "+payload.getLoggerNumber());
+        scenario.log("loggerType: "+payload.getLoggerType());
+        scenario.log("baseInterval: "+payload.getBaseInterval());
 
     }
 }

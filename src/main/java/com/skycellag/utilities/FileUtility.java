@@ -9,7 +9,7 @@ import java.util.Properties;
  * @created : 2.01.2024,16:25
  * @Email :aliyeidiris@gmail.com
  **/
-public class ConfigUtility {
+public class FileUtility {
     public static String readConfig(String key){
         final String configPath="config.properties";
         Properties properties =new Properties();

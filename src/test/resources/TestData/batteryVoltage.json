@@ -1,0 +1,11 @@
+{
+  "useStandardizedTimestamps": false,
+  "from": "2023-11-17T12:00",
+  "to": "2023-12-17T12:00",
+  "dataTypes": [
+    "BATTERY_VOLTAGE"
+  ],
+  "sensorCodes": [
+    "BATTERY_VOLTAGE"
+  ]
+}
