@@ -117,13 +117,13 @@ public class Test4Steps extends TestBase {
 
     @And("user verify the response body with temperature information")
     public void userVerifyTheResponseBodyWithTemperatureInformation() {
-        response.getBody().prettyPrint();
-        String responseBody = response.getBody().asString();
+        String responseBody = response.getBody().asPrettyString();
         Assert.assertTrue(responseBody.contains(loggerNumber));
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json");
         Assert.assertTrue(responseBody.contains(loggers.getLoggerType()));
         Assert.assertTrue(responseBody.contains("TEMPERATURE"));
         Assert.assertTrue(responseBody.contains("23.1"));
+        scenario.log(responseBody);
     }
 
     //scenario 3
@@ -147,13 +147,13 @@ public class Test4Steps extends TestBase {
 
     @And("user verify the response body with battery voltage information")
     public void userVerifyTheResponseBodyWithBatteryVoltageInformation() {
-        response.getBody().prettyPrint();
-        String responseBody = response.getBody().asString();
+        String responseBody = response.getBody().asPrettyString();
         Assert.assertTrue(responseBody.contains(loggerNumber));
         Assert.assertEquals(response.getHeader("Content-Type"), "application/json");
         Assert.assertTrue(responseBody.contains(loggers.getLoggerType()));
         Assert.assertTrue(responseBody.contains("BATTERY_VOLTAGE"));
         Assert.assertTrue(responseBody.contains("1.3"));
+        scenario.log(responseBody);
     }
 
     //all scenario

@@ -2,7 +2,6 @@ package com.skycellagtest;
 
 import com.skycellag.utilities.TestBase;
 import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
 import io.restassured.RestAssured;
 
 /**
@@ -13,8 +12,7 @@ import io.restassured.RestAssured;
 public class Hooks extends TestBase {
 
     @Before
-    public void setUp(Scenario scenario){
-        scenario.log("API test is started...");
+    public void setUp(){
         RestAssured.authentication=RestAssured.basic(username,password);
     }
 }

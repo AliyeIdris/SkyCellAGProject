@@ -1,6 +1,8 @@
 package com.skycellagtest.stepdefinitions;
 
 import com.skycellag.utilities.TestBase;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,6 +12,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Assert;
+
 import java.util.Base64;
 
 
@@ -22,8 +25,13 @@ import static io.restassured.RestAssured.given;
  * @Email :aliyeidiris@gmail.com
  **/
 public class Test2Steps extends TestBase {
+    Scenario scenario;
     String tokenURL=readConfig("tokenURL");
     Response response;
+    @Before
+    public void beforeTest(Scenario scenario){
+        this.scenario=scenario;
+    }
     @Given("user has a valid authentication information to connect to the Api")
     public void userHasAValidAuthenticationInformationToConnectToTheApi() {
         RestAssured.baseURI=tokenURL;
@@ -47,7 +55,7 @@ public class Test2Steps extends TestBase {
 
     @And("the api should return a response body with token detail")
     public void theApiShouldReturnAResponseBodyWithTokenDetail() {
-        response.prettyPrint();
+        scenario.log(response.getBody().asPrettyString());
     }
 
     @And("verify the signature")
@@ -58,9 +66,9 @@ public class Test2Steps extends TestBase {
         String header=new String(decoder.decode(chunks[0]));
         String payload=new String(decoder.decode(chunks[1]));
         String signature=new String(decoder.decode(chunks[2]));
-        System.out.println(header);
-        System.out.println(payload);
-        System.out.println(signature);
+        scenario.log("Header: "+header);
+        scenario.log("Payload: "+payload);
+        scenario.log("Signature: "+signature);
 
     }
 }

@@ -3,6 +3,8 @@ package com.skycellagtest.stepdefinitions;
 import com.skycellag.payloads.LoggerPojo;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHolder;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -21,9 +23,14 @@ import static io.restassured.RestAssured.given;
  * @Email :aliyeidiris@gmail.com
  **/
 public class Test3Steps extends TestBase {
+    Scenario scenario;
     String loggerURL=readConfig("loggerURL");
     Response response;
     LoggerPojo payload;
+    @Before
+    public void beforeTest(Scenario scenario){
+        this.scenario=scenario;
+    }
     @Given("user has valid credentials and payload to create a logger {string}")
     public void userHasValidCredentialsAndPayloadToCreateALogger(String loggerType) {
         RestAssured.baseURI=loggerURL;
@@ -44,9 +51,9 @@ public class Test3Steps extends TestBase {
 
     @And("user verify the response content")
     public void userVerifyTheResponseContent() {
-        System.out.println("loggerNumber: "+payload.getLoggerNumber());
-        System.out.println("loggerType: "+payload.getLoggerType());
-        System.out.println("baseInterval: "+payload.getBaseInterval());
+        scenario.log("loggerNumber: "+payload.getLoggerNumber());
+        scenario.log("loggerType: "+payload.getLoggerType());
+        scenario.log("baseInterval: "+payload.getBaseInterval());
 
     }
 }
