@@ -11,9 +11,11 @@ import org.junit.runner.RunWith;
  **/
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        plugin = {"pretty","html:target/cucumber-testReport.html",
-                  "junit:target/cucumber-results.xml",
-                  "json: target/cucumber.json"},
+        plugin = {"pretty",
+                "html:target/cucumber-html-report.html",
+                "json:target/cucumber-json-report.json",
+                "junit:target/cucumber-xml-report.xml"},
+
         features = {"classpath:Features/"},
         tags="@APITest"
 )
