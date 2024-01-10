@@ -5,10 +5,14 @@
 2. Click the run icon in the CucumberTest class;
 
 ### Or run following code in terminal:
+```
 mvn test -Dtest=CucumberTest
+```
 
 ### Or
-mvn clean -f pom.xml test  
+```
+mvn clean -f pom.xml test
+```
 
 ### To run scheduled data insertion: 
 run ApiTestScheduler
