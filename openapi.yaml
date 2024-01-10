@@ -1,0 +1,68 @@
+openapi: 3.0.0
+info:
+  title: SkyCell API
+  description: Skycell logger data insertion
+  version: 1.0.0
+
+  servers:
+    - url: https://sensor-data-ingestion.dev.skycell.ch/v1/lora/configuration
+      description: Logger server
+  paths:
+    /lora:
+      post:
+        summary: Create a logger number
+        description: Creates a logger number
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemes/Logger'
+              example:
+                loggerNumber: '{loggerNumber}'
+                loggerType: '{loggerType}'
+                baseInterval: 600
+            security:
+              - apiKey: []
+        responses:
+          '201':
+            description: Successful creation of logger number
+            content:
+              application/json:
+                example:
+                status: success
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: Authorization
+      in: header
+
+  schemas:
+    Loggers:
+      type:array
+    items:
+      $ref: '#/components/schemes/Logger'
+      Logger:
+        title: Logger
+        required:
+          - loggerNumber
+          - loggerType
+          - baseInterval
+        type: object
+        properties:
+          loggerNumber:
+            type: string
+          loggerType:
+            type: string
+          baseInterval:
+            type: integer
+        example:
+          loggerNumber: AA6F8349CE97E4BE
+          loggerType: MR_810T
+          baseInterval: 600
+
+
+
+
