@@ -1,2 +1,4 @@
-/.idea/
 /target/
+# file: ~/.gitignore_global
+.DS_Store
+.idea

@@ -1,8 +1,8 @@
 package com.skycellagtest.stepdefinitions;
 
 import com.google.gson.Gson;
-import com.skycellag.payloads.Loggers;
 import com.skycellag.payloads.EndDeviceIds;
+import com.skycellag.payloads.Loggers;
 import com.skycellag.utilities.TestBase;
 import com.skycellag.utilities.TestDataHolder;
 import com.skycellagtest.ResponseHolder;
@@ -17,12 +17,10 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.junit.Assert;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -42,16 +40,11 @@ public class Test4Steps extends TestBase {
     String JwTToken;
     String loggerNumber;
     JSONObject bodyPayload;
-    String fileAddress;
-    JSONParser parser;
     Loggers loggers;
 
     @Before
     public void beforeTestStart(Scenario scenario) {
         this.scenario = scenario;
-        parser = new JSONParser();
-        String s = File.separator;
-        fileAddress = System.getProperty("user.dir") + s + "src" + s + "test" + s + "resources" + s + "TestData" + s;
     }
 
     //Background
@@ -66,17 +59,9 @@ public class Test4Steps extends TestBase {
     @Given("user should have a valid url and request body")
     public void userShouldHaveAValidUrlAndRequestBody() {
         RestAssured.baseURI = sensorURL;
-
         EndDeviceIds endDeviceIds = new EndDeviceIds("eui-" + loggerNumber, loggerNumber);
-        try {
-            Object obj = parser.parse(new FileReader(fileAddress + "sensorData.json"));
-            bodyPayload = (JSONObject) obj;
+            bodyPayload = object("sensorData.json");
             bodyPayload.put("end_device_ids", new Gson().toJsonTree(endDeviceIds));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 
@@ -98,15 +83,8 @@ public class Test4Steps extends TestBase {
     }
     @And("user has a valid request body for temperature")
     public void userHasAValidRequestBodyForTemperature() {
-        try {
-            Object obj = parser.parse(new FileReader(fileAddress + "temperature.json"));
-            bodyPayload = (JSONObject) obj;
+            bodyPayload = object("temperature.json");
             bodyPayload.put("loggers", new Gson().toJsonTree(new ArrayList<>(Arrays.asList(loggers))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @When("user sends post request with temperature payload")
@@ -129,15 +107,8 @@ public class Test4Steps extends TestBase {
     //scenario 3
     @And("user has a valid request body for battery voltage")
     public void userHasAValidRequestBodyForBatteryVoltage() {
-        try {
-            Object obj = parser.parse(new FileReader(fileAddress + "batteryVoltage.json"));
-            bodyPayload = (JSONObject) obj;
+            bodyPayload = object("batteryVoltage.json");
             bodyPayload.put("loggers", new Gson().toJsonTree(new ArrayList<>(Arrays.asList(loggers))));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
     }
     @When("user sends post request with battery voltage payload")
     public void userSendsPostRequestWithBatteryVoltagePayload() {
@@ -160,6 +131,40 @@ public class Test4Steps extends TestBase {
     @Then("server should return {int} status code")
     public void serverShouldReturnStatusCode(int statusCode) {
         Assert.assertEquals(statusCode,response.getStatusCode());
+
+    }
+
+    @And("api should return the dataValue as {double}")
+    public void apiShouldReturnTheDataValueAs(int dataValue) {
+        Assert.assertEquals(response.jsonPath().getInt("dataValue"),dataValue);
+    }
+
+    private JSONObject object(String fileName){
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject=null;
+
+        try {
+            // Attempt to get the input stream using the test class loader
+            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("TestData/"+fileName);
+
+            if (inputStream != null) {
+                // Debugging statement to print the file path
+                System.out.println("File Path: " + Thread.currentThread().getContextClassLoader().getResource("TestData/"+fileName).getFile());
+
+                // Parse the JSON file
+                InputStreamReader reader = new InputStreamReader(inputStream);
+                Object obj = parser.parse(reader);
+                jsonObject = (JSONObject) obj;
+
+                // Now you can work with the JSON object
+            } else {
+                System.out.println("File not found: " + fileName);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
 
     }
 }

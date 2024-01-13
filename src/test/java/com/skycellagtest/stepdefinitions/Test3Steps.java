@@ -56,4 +56,13 @@ public class Test3Steps extends TestBase {
         scenario.log("baseInterval: "+payload.getBaseInterval());
 
     }
+
+    @When("user post request with invalid logger number {string} or invalid logger type {string}")
+    public void userPostRequestWithInvalidLoggerNumberOrInvalidLoggerType(String loggerNumber, String loggerType) {
+        RestAssured.baseURI=loggerURL;
+        payload=new LoggerPojo(loggerNumber,loggerType,600);
+        response=given().contentType(ContentType.JSON).and().headers("APIKEY",apiKey)
+                .body(payload).when().post(loggerURL).then().extract().response();
+
+    }
 }

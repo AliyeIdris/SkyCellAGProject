@@ -71,4 +71,18 @@ public class Test2Steps extends TestBase {
         scenario.log("Signature: "+signature);
 
     }
+
+    @When("user enter invalid username {string} or invalid password {string}")
+    public void userEnterInvalidUsernameOrInvalidPassword(String username, String password) {
+        response=given().contentType(ContentType.URLENC).accept("application/x-www-form-urlencoded")
+                .formParam("client_id","webapp")
+                .formParam("grant_type","password")
+                .formParam("username",username)
+                .formParam("password",password)
+                .when().post(tokenURL).then().extract().response();
+    }
+
+    @And("user should not be able to access his token")
+    public void userShouldNotBeAbleToAccessHisToken() {
+    }
 }
