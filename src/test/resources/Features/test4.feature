@@ -16,6 +16,7 @@ Feature: Admin user should be able to send request to api server and read data b
     When user sends post request with temperature payload
     Then server should return 200 status code
     And user verify the response body with temperature information
+    And api should return the dataValue as 23.1
 
   Scenario: User should be able to read battery voltage information from the server
     Given user has a valid url
@@ -24,3 +25,4 @@ Feature: Admin user should be able to send request to api server and read data b
     When user sends post request with battery voltage payload
     Then server should return 200 status code
     And user verify the response body with battery voltage information
+    And api should return the dataValue as 1.3
